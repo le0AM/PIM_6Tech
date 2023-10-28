@@ -1,0 +1,14 @@
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\bin\Debug\PIM_6Tech.exe.config
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\bin\Debug\PIM_6Tech.exe
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\bin\Debug\PIM_6Tech.pdb
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\bin\Debug\MaterialSkin.dll
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.csproj.AssemblyReference.cache
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.Properties.Resources.resources
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.csproj.GenerateResource.cache
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.csproj.CoreCompileInputs.cache
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.csproj.CopyComplete
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.exe
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.pdb
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.Login.resources
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.Principal.resources
+C:\Users\leoam\source\repos\PIM_6Tech\PIM_6Tech\obj\Debug\PIM_6Tech.Principal_Comum.resources

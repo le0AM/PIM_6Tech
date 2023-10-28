@@ -1,0 +1,1 @@
+Bem-vindo esse é um projeto do Sistema de Folha de Pagamento que foi criado para apresentação de um trabalho da faculdade. Este sistema foi desenvolvido com o objetivo de simplificar e automatizar o processo de geração de folhas de pagamento para os funcionários, tornando-o mais eficiente e preciso. ainda está em andamento
