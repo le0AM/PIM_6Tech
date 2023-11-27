@@ -19,8 +19,10 @@ namespace PIM_6Tech
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue900, Primary.Blue900, Primary.Blue900, Accent.LightBlue200, TextShade.WHITE);
         }
+        // string de conexão com o banco de dados
         SqlConnection conexao = new SqlConnection(@"Data Source=DESKTOP-U33RJQE\SQLLEO;Initial Catalog=Banco_tech;Integrated Security=True");
         
+        // Verifico se os campos estão vazios
         void Verificar()
         {
             if (txtMatricula.Text == "" && txtSenha.Text == "")
@@ -35,16 +37,19 @@ namespace PIM_6Tech
 
         }
 
+        // botão de entrar com a lógica de verificação de usuário
         private void BtnEntrar_Click(object sender, EventArgs e)
         {
-
+            conexao.Open();
             String matricula = txtMatricula.Text;
             String senha = txtSenha.Text;
 
-
-                string query = "SELECT tipo_usuario FROM Login_Func WHERE Matricula = @matricula AND Senha = @senha";
-            conexao.Open();
-
+            // faz a consulta com o banco de dados
+            
+            string query = "SELECT tipo_usuario FROM Login_Func WHERE Matricula = @matricula AND Senha = @senha";
+            //Abre a conexão com o banco de dados
+            
+             
             SqlCommand cmd = new SqlCommand(query, conexao);
             cmd.Parameters.AddWithValue("@matricula", matricula);
             cmd.Parameters.AddWithValue("@senha", senha);
@@ -52,29 +57,29 @@ namespace PIM_6Tech
 
             object userType = cmd.ExecuteScalar(); // Obtém o tipo de usuário
 
-            if (userType != null)
-            {
-                if (userType.ToString() == "Comum")
+                if (userType != null)
                 {
-                    Principal_Comum frmComum = new Principal_Comum();
-                    this.Hide();
-                    frmComum.Show();
-                    // Redirecione para a tela de usuário comum
-                    MessageBox.Show("Login bem-sucedido como usuário comum.");
-                }
+                    if (userType.ToString() == "Comum")
+                    {
+                        Principal_Comum frmComum = new Principal_Comum();
+                        this.Hide();
+                        frmComum.Show();
+                        // Redirecione para a tela de usuário comum
+                        MessageBox.Show("Login bem-sucedido como usuário comum.");
+                    }
 
 
-                else if (userType.ToString() == "ADM")
-                {
+                    else if (userType.ToString() == "ADM")
+                    {
 
-                    Principal principal = new Principal();
-                    this.Hide();
-                    principal.Show();
-                    // Redirecione para a tela de administrador
-                    MessageBox.Show("Login bem-sucedido como administrador.");
-                }
-                conexao.Close();
-
+                        Principal principal = new Principal();
+                        this.Hide();
+                        principal.Show();
+                        // Redirecione para a tela de administrador
+                        MessageBox.Show("Login bem-sucedido como administrador.");
+                    }
+                    conexao.Close();
+                
                 /* conexao.Open();
                  Verificar();
                  string query = "SELECT * FROM Funcionario WHERE Matricula = '" + txtMatricula.Text + "' AND Senha = '" + txtSenha.Text + "'";

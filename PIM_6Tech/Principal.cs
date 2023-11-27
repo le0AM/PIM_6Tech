@@ -31,55 +31,8 @@ namespace PIM_6Tech
 
         }
 
-        private void btnCalcular_Click(object sender, EventArgs e)
-        {
-            if (txtSalario.Text == "")
-            {
-                MessageBox.Show("O Campo salario é obrigatório", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtSalario.Focus();
-            }
-            else
-            {
-                double salario = Convert.ToDouble(txtSalario.Text);
-                double inss = 0.07;
-                double fgts = 0.08;
-                double vt = 0.06;
-                double vr = 0.05;
-                double salarioLiquido = (salario * inss) + (salario * fgts) + (salario * vt) + (salario * vr);
-                double salarioDesc = salario - salarioLiquido;
-                lblSalarioliqui.Text = Convert.ToString(salarioDesc);
-                double salarioinss = salario * inss;
-                double salariofgts = salario * fgts;
-                double salariot = salario * vt;
-                double salarior = salario * vr;
-                lblINSS.Text = Convert.ToString(salarioinss);
-                lblFGTS.Text = Convert.ToString(salariofgts);
-                lblVT.Text = Convert.ToString(salariot);
-                lblVR.Text = Convert.ToString(salarior);
-            }
-        }
 
-        private void CalcularRend_Click(object sender, EventArgs e)
-        {
-            double salario = Convert.ToDouble(txtRend.Text);
-            double inss = 0.07;
-            double fgts = 0.08;
-            double vt = 0.06;
-            double vr = 0.05;
-            double salarioLiquido = (salario * inss) + (salario * fgts) + (salario * vt) + (salario * vr);
-            double salarioRend = (salario - salarioLiquido) * 12;
-            label16.Text = Convert.ToString(salarioRend);
-            double salarioinss = (salario * inss) * 12;
-            double salariofgts = (salario * fgts) * 12;
-            double salariot = (salario * vt) * 12;
-            double salarior = (salario * vr) * 12;
-            label11.Text = Convert.ToString(salarioinss);
-            label10.Text = Convert.ToString(salariofgts);
-            label9.Text = Convert.ToString(salariot);
-            label8.Text = Convert.ToString(salarior);
-        }
-
-        private void btnCadastrar_Click(object sender, EventArgs e )
+        private void btnCadastrar_Click(object sender, EventArgs e)
         {
             if (txtNome.Text == "")
             {
@@ -139,6 +92,8 @@ namespace PIM_6Tech
                     String data_admissao = txtAdmissao.Text;
                     String tipoUsuario = txtCargo.SelectedItem.ToString();
                     String turno = txtTurno.SelectedItem.ToString();
+                    String telefone = txtTelefone.Text;
+                    String salarioBruto = txtSalarioCad.Text;
 
                     string query = "insert into Login_Func(Matricula,Senha, tipo_usuario) values(@matricula,@senha,@tipoUsuario)";
                     SqlCommand command2 = new SqlCommand(query, conexao);
@@ -147,12 +102,12 @@ namespace PIM_6Tech
                     command2.Parameters.AddWithValue("@tipoUsuario", tipoUsuario);
                     int matriculaRowsAffected = command2.ExecuteNonQuery();
 
-                    if(matriculaRowsAffected > 0)
-                        {
+                    if (matriculaRowsAffected > 0)
+                    {
 
                         string getIdQuery = "SELECT @@IDENTITY";
                         SqlCommand getIdcommand = new SqlCommand(getIdQuery, conexao);
-                        string sqlFunc = "insert into Funcionario(Matricula,Nome,Data_Nasc,Email,Data_Admissao,Turno) values(@matricula, @nome,@data_nasc,@email,@data_admissao,@turno)";
+                        string sqlFunc = "insert into Funcionario(Matricula,Nome,Data_Nasc,Email,Data_Admissao,Turno,Telefone, Salario_base) values(@matricula, @nome,@data_nasc,@email,@data_admissao,@turno, @Telefone, @Salario_base)";
                         SqlCommand cm = new SqlCommand(sqlFunc, conexao);
                         cm.Parameters.AddWithValue("@matricula", matricula);
                         cm.Parameters.AddWithValue("@nome", nome);
@@ -160,11 +115,22 @@ namespace PIM_6Tech
                         cm.Parameters.AddWithValue("@email", email);
                         cm.Parameters.AddWithValue("@data_admissao", data_admissao);
                         cm.Parameters.AddWithValue("@turno", turno);
+                        cm.Parameters.AddWithValue("@Telefone", telefone);
+                        cm.Parameters.AddWithValue("@Salario_base", salarioBruto);
 
                         int funcionarioRowsAffected = cm.ExecuteNonQuery();
-                  
+
                         MessageBox.Show("O cadastro foi realizado com sucesso", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         txtNome.Focus();
+                        txtCadMatricula.Clear();
+                        txtNome.Clear();
+                        txtEmail.Clear();
+                        txtCadSenha.Clear();
+                        txtNascimento.Clear();
+                        txtConfSenha.Clear();
+                        txtAdmissao.Clear();
+                        txtTelefone.Clear();
+                        txtSalarioCad.Clear();
                     }
                 }
                 catch (Exception erro)
@@ -192,47 +158,10 @@ namespace PIM_6Tech
 
         }
 
-        private void PesquisarFerias_Click(object sender, EventArgs e)
-        {
-            conexao.Open();
-            string query = "SELECT * FROM Funcionario WHERE Matricula = '" + MatriculaFerias.Text + "'";
-            SqlDataAdapter dp = new SqlDataAdapter(query, conexao);
-            DataTable dt = new DataTable();
-            dp.Fill(dt);
-            lblColab.Text = dt.Rows[0]["Nome"].ToString();
-            lblData.Text = dt.Rows[0]["Data_Admissao"].ToString();
-            lblFerias.Text = dt.Rows[0]["Data_Admissao"].ToString(); // adiciona a data no label ferias
-            SqlCommand command = new SqlCommand(query, conexao);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                DateTime dateTime = Convert.ToDateTime(lblFerias.Text); //Banco esta VARCHAR e no codigo está DATE  
-                dateTime = dateTime.AddYears(1);
-               // lblFerias.Text = dateTime("dd/MM/yyyy");
-            }
-            conexao.Close();
-        }
+       
+         
 
-        private void btnSalvarFerias_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                conexao.Open();
-                string query = "UPDATE Funcionario SET data_ferias = '" + lblSolicitadas.Text + "' WHERE Matricula = '" + MatriculaFerias.Text + "'";
-                SqlDataAdapter dp = new SqlDataAdapter(query, conexao);
-                DataTable dt = new DataTable();
-                dp.Fill(dt);
-                lblSolicitadas.Text = dt.Rows[0]["data_ferias"].ToString();
-                DateTime dateTime = Convert.ToDateTime(lblSolicitadas.Text);
-                lblFerias.Text = dateTime.ToString("dd/MM/yyyy");
-               MessageBox.Show("Ferias solicitadas com sucesso", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                conexao.Close();
-            }
-            catch
-            {
-                MessageBox.Show("Erro ao solicitar ferias", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        
 
         private void txtPagamentos_Click(object sender, EventArgs e)
         {
@@ -549,15 +478,13 @@ namespace PIM_6Tech
             try
             {
                 conexao.Open();
-               string query = "SELECT * FROM Funcionario WHERE Matricula = '" + txtEditarMatricula.Text + "'";
+                string query = "SELECT * FROM Funcionario WHERE Matricula = '" + txtEditarMatricula.Text + "'";
                 SqlDataAdapter dp = new SqlDataAdapter(query, conexao);
                 DataTable dt = new DataTable();
                 dp.Fill(dt);
                 txtEditarNome.Text = dt.Rows[0]["Nome"].ToString();
                 txtEditarEmail.Text = dt.Rows[0]["Email"].ToString();
                 txtEditarTelefone.Text = dt.Rows[0]["Telefone"].ToString();
-                txtEditarSenha.Text = dt.Rows[0]["Senha"].ToString();
-                txtEditarConfirmar.Text = dt.Rows[0]["Senha"].ToString();
                 txtEditarNascimento.Text = dt.Rows[0]["Data_Nasc"].ToString();
                 txtEditarAdmissao.Text = dt.Rows[0]["Data_Admissao"].ToString();
                 txtEditarTurno.Text = dt.Rows[0]["Turno"].ToString();
@@ -567,8 +494,194 @@ namespace PIM_6Tech
             }
             catch
             {
-
+                MessageBox.Show("Erro ao pesquisar", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                conexao.Close();
+            }
+        }
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            string editarMatricula = txtEditarMatricula.Text;
+            string editarNome = txtEditarNome.Text;
+            string editaremail = txtEditarEmail.Text;
+            string editartelefone = txtEditarTelefone.Text;
+            string editarSenha = txtEditarSenha.Text;
+            string editarConfSenha = txtEditarConfirmar.Text;
+            string editarNascimento = txtEditarNascimento.Text;
+            string editarAdmissao = txtEditarAdmissao.Text;
+            string editarTuno = txtEditarTurno.SelectedItem.ToString();
+
+            try
+            {
+                conexao.Open();
+                string query = "UPDATE Funcionario SET Nome = @Nome, Email = @Email, Telefone = @Telefone, Data_Nasc = @Data_Nasc, Data_Admissao = @Data_Admissao, Turno = @Turno WHERE Matricula = @Matricula";
+                SqlCommand cmd = new SqlCommand(query, conexao);
+                cmd.Parameters.AddWithValue("@Nome", editarNome);
+                cmd.Parameters.AddWithValue("@Email", editaremail);
+                cmd.Parameters.AddWithValue("@Telefone", editartelefone);
+                cmd.Parameters.AddWithValue("@Data_Nasc", editarNascimento);
+                cmd.Parameters.AddWithValue("@Data_Admissao", editarAdmissao);
+                cmd.Parameters.AddWithValue("@Turno", editarTuno);
+                cmd.Parameters.AddWithValue("@Matricula", editarMatricula);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Dados alterados com sucesso", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Nenhum registro foi atualizado. Matrícula não encontrada.", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao alterar dados: " + ex.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conexao.Close();
+            }
+        }
+        private void btnDeletar_Click(object sender, EventArgs e)
+        {
+            string editarMatricula = txtEditarMatricula.Text;
+
+            try
+            {
+                conexao.Open();
+                string query = "DELETE FROM Funcionario WHERE Matricula = @Matricula";
+                SqlCommand cmd = new SqlCommand(query, conexao);
+                cmd.Parameters.AddWithValue("@Matricula", editarMatricula);
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                
+
+                if (rowsAffected > 0)
+                {
+                    string deleteLogin = "DELETE FROM Login_Func WHERE Matricula = @Matricula";
+                    SqlCommand cmdLogin = new SqlCommand(deleteLogin, conexao);
+                    cmdLogin.Parameters.AddWithValue("@Matricula", editarMatricula);
+                    int rowsAffectedLogin = cmdLogin.ExecuteNonQuery();
+                    MessageBox.Show("Funcionário excluído com sucesso", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Limpe os campos após a exclusão, se necessário
+                    txtEditarMatricula.Clear();
+                    txtEditarNome.Clear();
+                    txtEditarEmail.Clear();
+                    txtEditarTelefone.Clear();
+                    txtEditarSenha.Clear();
+                    txtEditarConfirmar.Clear();
+                    txtEditarNascimento.Clear();
+                    txtEditarAdmissao.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Nenhum funcionário foi excluído. Matrícula não encontrada.", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao excluir o funcionário: " + ex.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conexao.Close();
+            }
+        }
+        private void materialTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialTextBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialTextBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialButton2_Click(object sender, EventArgs e) // Botão bsucar da pagina de pagamentos
+        {
+            conexao.Open();
+            string matricula = matriculaPag.Text;
+            string nome = txtNomePag.Text;
+            string salarioBruto = txtSalarioPag.Text;
+            string query = "SELECT * FROM Funcionario WHERE Matricula = '" + matriculaPag.Text + "'";
+            SqlDataAdapter dp = new SqlDataAdapter(query, conexao);
+            DataTable dt = new DataTable();
+            dp.Fill(dt);
+            txtNomePag.Text = dt.Rows[0]["Nome"].ToString();
+            txtSalarioPag.Text = dt.Rows[0]["Salario_base"].ToString();
+            SqlCommand cr = new SqlCommand(query, conexao);
+            SqlDataReader reader = cr.ExecuteReader();
+            conexao.Close();
+        }
+        private void btnCalcular_Click(object sender, EventArgs e)
+        {
+            if (txtSalarioPag.Text == "")
+            {
+                MessageBox.Show("O Campo salário é obrigatório", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtSalarioPag.Focus();
+            }
+            else
+            {
+                double salario = Convert.ToDouble(txtSalarioPag.Text);
+                double inss = 0.07;
+                double fgts = 0.08;
+                double vt = 0.06;
+                double vr = 0.05;
+                string dataPag = txtDataPag.Text;
+
+                double salarioLiquido = salario - (salario * (inss + fgts + vt + vr));
+                double salarioDescINSS = salario * inss;
+                double salarioDescFGTS = salario * fgts;
+                double salarioDescVT = salario * vt;
+                double salarioDescVR = salario * vr;
+                txtSalarioLiqPag.Text = salarioLiquido.ToString();
+                txtINSSPag.Text = salarioDescINSS.ToString();
+                txtFGTSPag.Text = salarioDescFGTS.ToString();
+                txtVTPag.Text = salarioDescVT.ToString();
+                txtVRPag.Text = salarioDescVR.ToString();
+                txtDataPag.Text = dataPag.ToString();
+
+                // Insira as informações calculadas no banco de dados
+                try
+                {
+                    conexao.Open();
+                    string query = "INSERT INTO Pagamentos (INSS_Func, FGTS_Func, VT_Func, VR_Func, Salario_Liq, Matricula, Data_ferias) " +
+                        "VALUES ( @INSS,@FGTS, @VT, @VR,@SalarioLiquido, @Matricula, @Data_ferias)";
+                    SqlCommand cmd = new SqlCommand(query, conexao);
+                    cmd.Parameters.AddWithValue("@SalarioLiquido", salarioLiquido);
+                    cmd.Parameters.AddWithValue("@INSS", salarioDescINSS);
+                    cmd.Parameters.AddWithValue("@FGTS", salarioDescFGTS);
+                    cmd.Parameters.AddWithValue("@VT", salarioDescVT);
+                    cmd.Parameters.AddWithValue("@VR", salarioDescVR);
+                    cmd.Parameters.AddWithValue("@Matricula", matriculaPag.Text);
+                    cmd.Parameters.AddWithValue("@Data_ferias", dataPag);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Informações calculadas inseridas no banco de dados com sucesso", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao inserir informações calculadas no banco de dados: " + ex.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    conexao.Close();
+                }
+            }
+
+
         }
     }
 }
