@@ -15,10 +15,12 @@ namespace PIM_6Tech
 {
     public partial class Principal : MaterialForm
     {
+        //String de conexão com o banco de dados
         SqlConnection conexao = new SqlConnection(@"Data Source=DESKTOP-U33RJQE\SQLLEO;Initial Catalog=Banco_tech;Integrated Security=True");
 
         public Principal()
         {
+            // configuração e inicialização do material skin
             InitializeComponent();
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
@@ -34,6 +36,7 @@ namespace PIM_6Tech
 
         private void btnCadastrar_Click(object sender, EventArgs e)
         {
+            // Validação dos campos de cadastro
             if (txtNome.Text == "")
             {
                 MessageBox.Show("O Campo nome é obrigatório", "ATENÇÂO", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -83,6 +86,7 @@ namespace PIM_6Tech
             {
                 try
                 {
+                    // inserindo dados de cadastro no banco de dados
                     conexao.Open();
                     String nome = txtNome.Text;
                     String matricula = txtCadMatricula.Text;
@@ -152,6 +156,7 @@ namespace PIM_6Tech
 
         private void materialButton1_Click(object sender, EventArgs e)
         {
+            //botão de sair
             Login login = new Login();
             this.Hide();
             login.Show();
@@ -465,6 +470,7 @@ namespace PIM_6Tech
 
         private void btnPesquisar_Click(object sender, EventArgs e)
         {
+            //botão de pesquisa
             string editarMatricula = txtEditarMatricula.Text;
             string editarNome = txtEditarNome.Text;
             string editaremail = txtEditarEmail.Text;
@@ -477,6 +483,7 @@ namespace PIM_6Tech
 
             try
             {
+                //pesquisa de dados no banco de dados
                 conexao.Open();
                 string query = "SELECT * FROM Funcionario WHERE Matricula = '" + txtEditarMatricula.Text + "'";
                 SqlDataAdapter dp = new SqlDataAdapter(query, conexao);
@@ -503,6 +510,7 @@ namespace PIM_6Tech
         }
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            //botão de alteração de dados
             string editarMatricula = txtEditarMatricula.Text;
             string editarNome = txtEditarNome.Text;
             string editaremail = txtEditarEmail.Text;
@@ -515,6 +523,7 @@ namespace PIM_6Tech
 
             try
             {
+                //alteração de dados no banco de dados
                 conexao.Open();
                 string query = "UPDATE Funcionario SET Nome = @Nome, Email = @Email, Telefone = @Telefone, Data_Nasc = @Data_Nasc, Data_Admissao = @Data_Admissao, Turno = @Turno WHERE Matricula = @Matricula";
                 SqlCommand cmd = new SqlCommand(query, conexao);
@@ -552,6 +561,7 @@ namespace PIM_6Tech
 
             try
             {
+                //exclusão de dados no banco de dados
                 conexao.Open();
                 string query = "DELETE FROM Funcionario WHERE Matricula = @Matricula";
                 SqlCommand cmd = new SqlCommand(query, conexao);
@@ -606,8 +616,10 @@ namespace PIM_6Tech
 
         }
 
-        private void materialButton2_Click(object sender, EventArgs e) // Botão bsucar da pagina de pagamentos
+        private void materialButton2_Click(object sender, EventArgs e) 
+            // Botão bsucar da pagina de pagamentos
         {
+            
             conexao.Open();
             string matricula = matriculaPag.Text;
             string nome = txtNomePag.Text;
@@ -624,6 +636,7 @@ namespace PIM_6Tech
         }
         private void btnCalcular_Click(object sender, EventArgs e)
         {
+            //botão de calculo de pagamentos
             if (txtSalarioPag.Text == "")
             {
                 MessageBox.Show("O Campo salário é obrigatório", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);

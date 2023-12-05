@@ -18,6 +18,7 @@ namespace PIM_6Tech
     {
         public Principal_Comum()
         {
+            //Inicialização do material skin
             InitializeComponent();
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
@@ -33,6 +34,7 @@ namespace PIM_6Tech
 
         private void btnBuscarPag_Click(object sender, EventArgs e)
         {
+            //botão para buscar os descontos e o salário líquido do funcionário
             conexao.Open();
             string matricula = matriculaPag.Text;
             string nome = txtNomePag.Text;
